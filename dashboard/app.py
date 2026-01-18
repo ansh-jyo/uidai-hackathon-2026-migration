@@ -67,19 +67,19 @@ st.markdown("""
 # -----------------------------
 @st.cache_data
 def load_state_month():
-    df = pd.read_csv("data/dashboard_state_month.csv")
+    df = pd.read_csv("../data/dashboard_state_month.csv")
     df["month"] = pd.to_datetime(df["month"], errors="coerce")
     return df
 
 @st.cache_data
 def load_district_month():
-    df = pd.read_csv("data/dashboard_district_month.csv")
+    df = pd.read_csv("../data/dashboard_district_month.csv")
     df["month"] = pd.to_datetime(df["month"], errors="coerce")
     return df
 
 @st.cache_data
 def load_geojson():
-    with open("dashboard/india_states.geojson", "r", encoding="utf-8") as f:
+    with open("india_states.geojson", "r", encoding="utf-8") as f:
         return json.load(f)
 
 state_df = load_state_month()
