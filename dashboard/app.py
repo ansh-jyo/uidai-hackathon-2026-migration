@@ -75,6 +75,49 @@ section[data-testid="stSidebar"]{
     box-shadow: 0px 0px 28px rgba(0,0,0,0.65);
 }
 
+
+/* Sidebar slide-in animation */
+section[data-testid="stSidebar"] {
+    animation: sidebarSlide 0.6s ease-in-out;
+}
+
+@keyframes sidebarSlide {
+    from {
+        transform: translateX(-25px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+/* Sidebar button hover animation */
+.stButton > button {
+    transition: all 0.25s ease-in-out !important;
+}
+
+/* Hover glow + lift */
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 0px 18px rgba(0,245,255,0.18);
+    border: 1px solid rgba(0,245,255,0.35);
+}
+
+/* Click animation */
+.stButton > button:active {
+    transform: scale(0.98);
+    box-shadow: 0px 0px 10px rgba(124,255,0,0.18);
+}
+
+/* Smooth sidebar expanders */
+div[data-testid="stExpander"] {
+    transition: all 0.3s ease-in-out;
+}
+
+
+           
+
 /* Sidebar headings */
 section[data-testid="stSidebar"] h2{
     font-size: 18px !important;
