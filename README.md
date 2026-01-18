@@ -48,7 +48,6 @@ uidai-hackathon-2026-migration/
 ├── .gitattributes
 └── README.md
 
-
 ---
 
 ## 📸 Dashboard Preview
@@ -67,6 +66,12 @@ uidai-hackathon-2026-migration/
 
 ---
 
+## 🧭 How to Use
+- Use sidebar to switch pages (India / State / District / Age)
+- Use Time Window slider to filter months
+- Use State/District filters for drilldown insights
+
+
 
 ## ▶️ Run Locally
 
@@ -80,5 +85,8 @@ pip install -r dashboard/requirements.txt
 streamlit run dashboard/app.py
 
 http://localhost:8501
+
+## 🔗 Live Demo
+https://uidai-hackathon-2026-migration-guputlnnbpzayyeqmdevxn.streamlit.app/
 
 
