@@ -29,21 +29,44 @@ uidai-hackathon-2026-migration/
 ├── dashboard/
 │   ├── app.py
 │   ├── requirements.txt
-│   ├── india_states.geojson
+│   └── india_states.geojson
 │
 ├── data/
 │   ├── dashboard_state_month.csv
-│   ├── dashboard_district_month.csv
+│   └── dashboard_district_month.csv
 │
 ├── notebook/
 │   └── UIDAI_Migration_Urbanization_Analysis.ipynb
 │
 ├── assets/
-│   └── aadhaar_transparent.png
+│   ├── aadhaar_transparent.png
+│   ├── 1-front.png
+│   ├── 2-migration-in-out.png
+│   ├── 3-heatmap.png
+│   └── 4-gainers.png
 │
+├── .gitattributes
 └── README.md
 
+
 ---
+
+## 📸 Dashboard Preview
+
+### 🗺️ India Overview (Map + KPIs)
+![India Overview](assets/1-front.png)
+
+### 📊 Migration In vs Out
+![Migration In Out](assets/2-migration-in-out.png)
+
+### 🌡️ Migration Heatmap
+![Heatmap](assets/3-heatmap.png)
+
+### 🚀 Top Movers (Gainers / Losers)
+![Top Movers](assets/4-gainers.png)
+
+---
+
 
 ## ▶️ Run Locally
 
