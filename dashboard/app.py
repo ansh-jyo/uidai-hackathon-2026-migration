@@ -4,6 +4,35 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
+
+
+def apply_4k_plotly_theme(fig):
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#EAF0FF", size=13),
+        title=dict(font=dict(size=18, color="#FFFFFF")),
+        margin=dict(l=10, r=10, t=60, b=10),
+    )
+
+    fig.update_xaxes(
+        showgrid=False,
+        zeroline=False,
+        showline=False,
+        tickfont=dict(color="rgba(234,240,255,0.75)")
+    )
+
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="rgba(255,255,255,0.06)",
+        zeroline=False,
+        tickfont=dict(color="rgba(234,240,255,0.75)")
+    )
+
+    return fig
+
+
 
 # -----------------------------
 # Page Config
@@ -14,54 +43,128 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# -----------------------------
-# Neon Dark Corporate Styling (FULL)
-# -----------------------------
+#---------------------
+# Custom CSS Theme
+#----------------------------
 st.markdown("""
 <style>
-    .stApp {
-        background: radial-gradient(circle at 10% 20%, rgba(0,245,255,0.12), transparent 35%),
-                    radial-gradient(circle at 90% 80%, rgba(124,255,0,0.10), transparent 40%),
-                    #0B0F19;
-        color: #E6EAF2;
-    }
 
-    section[data-testid="stSidebar"] {
-        background: rgba(15, 20, 35, 0.92);
-        border-right: 1px solid rgba(0,245,255,0.18);
-    }
+/* -----------------------------
+   4K DARK + SOFT NEON THEME
+----------------------------- */
 
-    section[data-testid="stSidebar"] h2 {
-        font-size: 18px !important;
-        margin-bottom: 8px !important;
-        color: #E6EAF2 !important;
-    }
+.stApp{
+    background:
+        radial-gradient(circle at 12% 18%, rgba(0,245,255,0.10), transparent 40%),
+        radial-gradient(circle at 88% 82%, rgba(124,255,0,0.08), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 55%),
+        #060A12;
+    color: #EAF0FF;
+}
 
-    section[data-testid="stSidebar"] label {
-        font-size: 13.5px !important;
-        color: rgba(230,234,242,0.92) !important;
-    }
+/* Main container spacing */
+.block-container{
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
 
-    div[data-testid="stMetric"] {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(0,245,255,0.18);
-        border-radius: 18px;
-        padding: 12px;
-        box-shadow: 0px 0px 22px rgba(0,245,255,0.06);
-    }
+/* Sidebar */
+section[data-testid="stSidebar"]{
+    background: rgba(10, 14, 26, 0.92);
+    border-right: 1px solid rgba(0,245,255,0.10);
+    box-shadow: 0px 0px 28px rgba(0,0,0,0.65);
+}
 
-    .block-container { padding-top: 1.1rem; }
+/* Sidebar headings */
+section[data-testid="stSidebar"] h2{
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+    color: rgba(234,240,255,0.95) !important;
+    letter-spacing: 0.3px;
+}
 
-    .stButton>button {
-        background: linear-gradient(90deg, rgba(0,245,255,0.20), rgba(124,255,0,0.15));
-        border: 1px solid rgba(0,245,255,0.25);
-        border-radius: 14px;
-        color: #E6EAF2;
-        padding: 0.55rem 1rem;
-    }
+/* Sidebar labels */
+section[data-testid="stSidebar"] label{
+    font-size: 13.5px !important;
+    color: rgba(234,240,255,0.78) !important;
+}
+
+/* Metrics cards (premium glass) */
+div[data-testid="stMetric"] {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 14px 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.35);
+}
+div[data-testid="stMetric"] * {
+    color: #EAF0FF !important;
+}
+.glass-card{
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(0,245,255,0.12);
+    border-radius: 22px;
+
+    padding: 18px 18px;   /* ✅ this is the main improvement */
+    margin-top: 14px;
+    margin-bottom: 14px;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0px 10px 35px rgba(0,0,0,0.55),
+                0px 0px 18px rgba(0,245,255,0.06);
+}
+
+
+
+/* Button styling (matte + subtle neon glow) */
+.stButton > button{
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(0,245,255,0.16);
+    border-radius: 14px;
+    color: rgba(234,240,255,0.92);
+    padding: 0.55rem 1rem;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0px 0px 14px rgba(0,245,255,0.05);
+}
+
+.stButton > button:hover{
+    border: 1px solid rgba(0,245,255,0.30);
+    box-shadow:
+        0px 0px 20px rgba(0,245,255,0.10),
+        0px 0px 28px rgba(124,255,0,0.06);
+    transform: translateY(-1px);
+}
+
+/* Divider line */
+hr{
+    border: none !important;
+    height: 1px !important;
+    background: linear-gradient(
+        90deg,
+        rgba(0,245,255,0.00),
+        rgba(0,245,255,0.20),
+        rgba(124,255,0,0.10),
+        rgba(0,245,255,0.00)
+    ) !important;
+    margin: 18px 0px !important;
+}
+
+/* Remove white background from plotly charts */
+.js-plotly-plot .plotly, .js-plotly-plot .plotly div{
+    background: rgba(0,0,0,0) !important;
+}
+
+/* Streamlit default header/footer hide (clean look) */
+header{visibility:hidden;}
+footer{visibility:hidden;}
+
 </style>
 """, unsafe_allow_html=True)
+
 
 # -----------------------------
 # Load Data (PATH FIXED)
@@ -96,19 +199,65 @@ dist_df = load_district_month()
 india_geo = load_geojson()
 
 # -----------------------------
+# Logo Setup (MUST be before header)
+# -----------------------------
+import base64
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def get_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+logo_path = os.path.join(BASE_DIR, "..", "assets", "aadhaar_transparent.png")
+logo_base64 = get_base64(logo_path)
+
+# -----------------------------
 # Sidebar Navigation (FINAL)
 # -----------------------------
 chosen_state = None
 chosen_district = None
 
-st.sidebar.markdown("## 🧭 Navigation")
-page = st.sidebar.radio(
-    "Go to",
-    ["🇮🇳 India Overview", "🏙️ State Deep Dive", "📍 District Drilldown", "👥 Age Migration"],
-    label_visibility="collapsed"
-)
 
+# -----------------------------
+# Navigation (Buttons 2x2)
+# -----------------------------
+st.sidebar.markdown("## 🧭 Navigation")
+
+row1 = st.sidebar.columns(2)
+row2 = st.sidebar.columns(2)
+
+with row1[0]:
+    india_btn = st.sidebar.button("🇮🇳 India", use_container_width=True)
+
+with row1[1]:
+    state_btn = st.sidebar.button("🏙️ State", use_container_width=True)
+
+with row2[0]:
+    dist_btn = st.sidebar.button("📍 District", use_container_width=True)
+
+with row2[1]:
+    age_btn = st.sidebar.button("👥 Age", use_container_width=True)
+
+if "page" not in st.session_state:
+    st.session_state.page = "🇮🇳 India Overview"
+
+if india_btn:
+    st.session_state.page = "🇮🇳 India Overview"
+elif state_btn:
+    st.session_state.page = "🏙️ State Deep Dive"
+elif dist_btn:
+    st.session_state.page = "📍 District Drilldown"
+elif age_btn:
+    st.session_state.page = "👥 Age Migration"
+
+page = st.session_state.page
 st.sidebar.markdown("---")
+
+
+
+
+
 
 # -----------------------------
 # Time Filter (FINAL)
@@ -196,6 +345,9 @@ st.sidebar.metric("Total Activity", f"{state_df_f['activity_total'].sum():,.0f}"
 # -----------------------------
 # HEADER (FINAL CLEAN)
 # -----------------------------
+# -----------------------------
+# HEADER (FINAL CLEAN)
+# -----------------------------
 import base64
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -206,6 +358,8 @@ def get_base64(path):
 
 # ✅ Correct path: assets folder is outside dashboard
 logo_path = os.path.join(BASE_DIR, "..", "assets", "aadhaar_transparent.png")
+
+# ✅ create logo_base64 FIRST
 logo_base64 = get_base64(logo_path)
 
 st.markdown("""
@@ -263,6 +417,60 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+
+# -----------------------------
+# TOP NAVIGATION BAR (1 x 4 Tiles)
+# -----------------------------
+st.markdown("""
+<style>
+.nav-btn button{
+    width:100%;
+    border-radius:16px !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    background: rgba(255,255,255,0.06) !important;
+    color: rgba(230,234,242,0.92) !important;
+    font-weight: 700 !important;
+    padding: 10px 14px !important;
+    transition: 0.2s ease-in-out;
+}
+
+.nav-btn button:hover{
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+.nav-active button{
+    background: rgba(255,255,255,0.14) !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Default page
+if "page" not in st.session_state:
+    st.session_state.page = "🇮🇳 India Overview"
+
+col1, col2, col3, col4 = st.columns(4)
+
+def nav_button(label, page_name, col):
+    active_class = "nav-active" if st.session_state.page == page_name else ""
+    with col:
+        st.markdown(f"<div class='nav-btn {active_class}'>", unsafe_allow_html=True)
+        clicked = st.button(label, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    if clicked:
+        st.session_state.page = page_name
+
+nav_button("🇮🇳 India Overview", "🇮🇳 India Overview", col1)
+nav_button("🏙️ State Deep Dive", "🏙️ State Deep Dive", col2)
+nav_button("📍 District Drilldown", "📍 District Drilldown", col3)
+nav_button("👥 Age Migration", "👥 Age Migration", col4)
+
+page = st.session_state.page
+
+
 
 
 # ============================
@@ -339,6 +547,8 @@ if page == "🇮🇳 India Overview":
    
 
     # Choropleth Map
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
     fig_map = px.choropleth(
         rank,
         geojson=india_geo,
@@ -379,6 +589,7 @@ if page == "🇮🇳 India Overview":
     )
 
     st.plotly_chart(fig_map, use_container_width=True, config={"scrollZoom": True})
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.divider()
 
@@ -401,6 +612,7 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=50, b=10)
         )
+        fig_in = apply_4k_plotly_theme(fig_in)
         st.plotly_chart(fig_in, use_container_width=True)
 
     with right:
@@ -419,11 +631,113 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=50, b=10)
         )
+        fig_in = apply_4k_plotly_theme(fig_in)
         st.plotly_chart(fig_out, use_container_width=True)
 
     st.divider()
 
+    import plotly.graph_objects as go
+
+    st.divider()
+
+    st.markdown("## 🔀 Migration Flow (Proxy): Source → Destination")
+    st.caption(
+    "This Sankey shows a proxy flow model built from migration index signals. "
+    "It does NOT represent actual individual migration routes."
+)
+
+# 1) Prepare state-level migration signal
+    flow_rank = (
+     state_df_f.groupby("state", as_index=False)
+    .agg(mig=("migration_index", "mean"))
+)
+
+# Split into outflow (negative) and inflow (positive)
+    sources = flow_rank[flow_rank["mig"] < 0].copy()
+    targets = flow_rank[flow_rank["mig"] > 0].copy()
+
+# If not enough data
+    if len(sources) < 2 or len(targets) < 2:
+      st.warning("Not enough variation in migration index to generate Sankey flow.")
+    else:
+    # Convert signal strength to positive weights
+     sources["out_strength"] = sources["mig"].abs()
+    targets["in_strength"] = targets["mig"].abs()
+
+    # Take Top-N to keep Sankey clean
+    # Take Top-N to keep Sankey clean (BONUS slider)
+    TOP_N = st.slider("Number of states in flow chart", 5, 15, 10)
+
+    sources = sources.sort_values("out_strength", ascending=False).head(TOP_N)
+    targets = targets.sort_values("in_strength", ascending=False).head(TOP_N)
+
+
+    # Normalize weights
+    sources["out_w"] = sources["out_strength"] / sources["out_strength"].sum()
+    targets["in_w"] = targets["in_strength"] / targets["in_strength"].sum()
+
+    # Build proxy flows: each source distributes to each target
+    links = []
+    for _, s in sources.iterrows():
+        for _, t in targets.iterrows():
+            value = float(s["out_w"] * t["in_w"])  # proxy distribution
+            links.append((s["state"], t["state"], value))
+
+    link_df = pd.DataFrame(links, columns=["source", "target", "value"])
+
+    # Scale values for better visualization
+    link_df["value_scaled"] = link_df["value"] * 1000
+
+    # Create Sankey nodes 
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
+    all_nodes = list(pd.unique(link_df[["source", "target"]].values.ravel()))
+    node_index = {name: i for i, name in enumerate(all_nodes)}
+
+    sankey_source = link_df["source"].map(node_index)
+    sankey_target = link_df["target"].map(node_index)
+    sankey_value = link_df["value_scaled"]
+
+    fig_sankey = go.Figure(
+        data=[
+            go.Sankey(
+                arrangement="snap",
+                node=dict(
+                    pad=18,
+                    thickness=18,
+                    line=dict(color="rgba(0,0,0,0.8)", width=0.6),
+                    label=all_nodes,
+                    color="rgba(0,245,255,0.25)"
+                ),
+                link=dict(
+                    source=sankey_source,
+                    target=sankey_target,
+                    value=sankey_value,
+                    color="rgba(124,255,0,0.18)"
+                ),
+            )
+        ]
+    )
+
+    fig_sankey.update_layout(
+        title="Migration Flow Sankey (Proxy): Outflow → Inflow States",
+        font=dict(color="#E6EAF2"),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        height=650,
+        margin=dict(l=10, r=10, t=60, b=10),
+    )
+    fig_in = apply_4k_plotly_theme(fig_in)
+    
+    
+    st.plotly_chart(fig_sankey, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
     # Urbanization Hotspots Scatter
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.markdown("### 🌆 Urbanization Hotspots (High Activity + High Migration)")
     hotspots = rank.copy()
     hotspots["growth_pct_num"] = hotspots["avg_growth"] * 100
@@ -449,12 +763,19 @@ if page == "🇮🇳 India Overview":
         font=dict(color="#E6EAF2"),
         height=520
     )
-
+    fig_hot = apply_4k_plotly_theme(fig_hot)
     st.plotly_chart(fig_hot, use_container_width=True)
+    
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
     st.divider()
 
     # India trend
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.markdown("### 📆 India Trend")
     india_trend = (
         state_df_f.groupby("month", as_index=False)
@@ -469,11 +790,17 @@ if page == "🇮🇳 India Overview":
         font=dict(color="#E6EAF2"),
         title="India-wide Aadhaar Activity Trend"
     )
+    fig_in = apply_4k_plotly_theme(fig_in)
     st.plotly_chart(fig3, use_container_width=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)
     st.divider()
 
+    
+
     # Heatmap
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.markdown("### 🌡️ Migration Signal Heatmap (State × Month)")
     heat_df = state_df_f.groupby(["state", "month"], as_index=False).agg(
         mig=("migration_index", "mean")
@@ -494,12 +821,19 @@ if page == "🇮🇳 India Overview":
         height=650,
         margin=dict(l=10, r=10, t=60, b=10)
     )
+    fig_in = apply_4k_plotly_theme(fig_in)
 
     st.plotly_chart(fig_heat, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.divider()
+    
+    
+
 
     # Top Movers
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
     st.markdown("### 🚀 Top Movers (Month-on-Month Change)")
 
     mom = state_df_f.groupby(["state", "month"], as_index=False).agg(
@@ -532,6 +866,7 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=60, b=10)
         )
+        fig_gain = apply_4k_plotly_theme(fig_gain)
         st.plotly_chart(fig_gain, use_container_width=True)
 
     with colB:
@@ -550,7 +885,11 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=60, b=10)
         )
+        fig_in = apply_4k_plotly_theme(fig_in)
         st.plotly_chart(fig_lose, use_container_width=True)
+       
+        st.markdown('</div>', unsafe_allow_html=True)
+
 
     st.caption("MoM change shows sudden spikes/drops in migration signal (proxy). Useful for detecting emerging hotspots.")
 
@@ -571,7 +910,13 @@ if page == "🇮🇳 India Overview":
 # ============================
 # 🏙️ STATE DEEP DIVE
 # ============================
+
+
+
 elif page == "🏙️ State Deep Dive":
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.subheader("🏙️ State Deep Dive")
 
     if chosen_state is None:
@@ -599,6 +944,7 @@ elif page == "🏙️ State Deep Dive":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
+    fig_in = apply_4k_plotly_theme(fig)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### 📍 Top Districts by Activity")
@@ -623,12 +969,146 @@ elif page == "🏙️ State Deep Dive":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
+    fig2 = apply_4k_plotly_theme(fig2)
     st.plotly_chart(fig2, use_container_width=True)
+    
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+
+    import plotly.graph_objects as go
+
+    st.divider()
+    st.markdown("### 🔀 State Migration Flow (Proxy)")
+    st.caption(
+        "This Sankey shows a proxy origin/destination flow around the selected state using migration index signals. "
+        "It does NOT represent actual person-level migration routes."
+    )
+
+    flow_rank = (
+        state_df_f.groupby("state", as_index=False)
+        .agg(mig=("migration_index", "mean"))
+    )
+
+    # --- Selected state value ---
+    selected_row = flow_rank[flow_rank["state"] == chosen_state]
+    if selected_row.empty:
+        st.warning("Selected state not found in dataset.")
+        st.stop()
+
+    selected_mig = float(selected_row["mig"].iloc[0])
+
+    # --- Build sources & targets ---
+    sources = flow_rank[flow_rank["mig"] < 0].copy()
+    targets = flow_rank[flow_rank["mig"] > 0].copy()
+
+    TOP_N = st.slider("Number of connected states", 5, 15, 10)
+
+    # --- If all mig values are 0 (or too small) ---
+    if sources.empty and targets.empty:
+        st.warning("⚠️ Sankey cannot be generated because migration_index values are mostly 0 in this time window.")
+        st.info("Try expanding the time range or check if migration_index column has positive/negative values.")
+        st.stop()
+
+    # --- Build link_df ---
+    if selected_mig < 0:
+        # Outflow proxy: selected -> positive states
+        targets = targets.sort_values("mig", ascending=False).head(TOP_N)
+
+        if targets.empty:
+            st.warning("No positive migration states found to connect.")
+            st.stop()
+
+        targets["w"] = targets["mig"].abs()
+        targets["w"] = targets["w"] / targets["w"].sum()
+
+        link_df = pd.DataFrame({
+            "source": [chosen_state] * len(targets),
+            "target": targets["state"].tolist(),
+            "value": (targets["w"] * 1000).tolist()
+        })
+
+        title_flow = f"Outflow Proxy: {chosen_state} → Top Inflow States"
+
+    else:
+        # Inflow proxy: negative states -> selected
+        sources = sources.sort_values("mig", ascending=True).head(TOP_N)
+
+        if sources.empty:
+            st.warning("No negative migration states found to connect.")
+            st.stop()
+
+        sources["w"] = sources["mig"].abs()
+        sources["w"] = sources["w"] / sources["w"].sum()
+
+        link_df = pd.DataFrame({
+            "source": sources["state"].tolist(),
+            "target": [chosen_state] * len(sources),
+            "value": (sources["w"] * 1000).tolist()
+        })
+
+        title_flow = f"Inflow Proxy: Top Outflow States → {chosen_state}"
+
+    # --- Final check ---
+    if link_df.empty:
+        st.warning("Sankey links are empty. Nothing to plot.")
+        st.stop()
+
+    # --- Build Sankey ---
+    nodes = list(pd.unique(link_df[["source", "target"]].values.ravel()))
+    node_index = {name: i for i, name in enumerate(nodes)}
+
+    fig_state_flow = go.Figure(
+    data=[
+        go.Sankey(
+            arrangement="snap",
+            node=dict(
+                pad=18,
+                thickness=18,
+                line=dict(color="rgba(0,0,0,1)", width=0.8),
+                label=nodes,
+
+                # ✅ Neon cyan nodes (like your theme)
+                color="rgba(0,245,255,0.22)",
+            ),
+            link=dict(
+                source=link_df["source"].map(node_index),
+                target=link_df["target"].map(node_index),
+                value=link_df["value"],
+
+                # ✅ Neon green flow (like your theme)
+                color="rgba(124,255,0,0.22)",
+            ),
+        )
+    ]
+    )
+
+    fig_state_flow.update_layout(
+        title=title_flow,
+        font=dict(color="#E6EAF2"),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        height=520,
+        margin=dict(l=10, r=10, t=60, b=10),
+    )
+
+
+    
+    fig_in = apply_4k_plotly_theme(fig_in)
+    st.plotly_chart(fig_state_flow, use_container_width=True)
+
+
+
+    
 
 # ============================
 # 📍 DISTRICT DRILLDOWN
 # ============================
 elif page == "📍 District Drilldown":
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.subheader("📍 District Drilldown (State → District)")
 
     if chosen_state is None or chosen_district is None:
@@ -659,12 +1139,18 @@ elif page == "📍 District Drilldown":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
+    fig_in = apply_4k_plotly_theme(fig)
     st.plotly_chart(fig, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
 # ============================
 # 👥 AGE MIGRATION
 # ============================
 elif page == "👥 Age Migration":
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+
+
     st.subheader("👥 Age Activity Insights (Proxy, Not Direct Migration)")
     st.caption(
         "This section shows Aadhaar activity by age group. Higher 0–5 does NOT mean kids migrate alone — "
@@ -703,6 +1189,7 @@ elif page == "👥 Age Migration":
         font=dict(color="#E6EAF2"),
         height=520
     )
+    fig_in = apply_4k_plotly_theme(fig)
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
@@ -735,6 +1222,7 @@ elif page == "👥 Age Migration":
         yaxis_title="Adult Share (%)",
         margin=dict(l=10, r=10, t=60, b=10)
     )
+    fig_in = apply_4k_plotly_theme(fig_in)
     st.plotly_chart(fig_adult, use_container_width=True)
 
     st.divider()
@@ -766,8 +1254,12 @@ elif page == "👥 Age Migration":
         font=dict(color="#E6EAF2"),
         height=420
     )
-
+    fig_in = apply_4k_plotly_theme(fig_in)
     st.plotly_chart(fig_age, use_container_width=True)
+    
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
     st.success(
         "Interpretation: Adult Share % rising = stronger working-age movement signal (proxy). "
