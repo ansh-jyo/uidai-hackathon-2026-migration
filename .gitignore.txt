@@ -1,8 +1,18 @@
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+.env
 .venv/
 venv/
-env/
-.ipynb_checkpoints/
+
 .streamlit/
+
 .DS_Store
+
+*.zip
+*.rar
+
+# If your data is too large, keep it out
+# data/

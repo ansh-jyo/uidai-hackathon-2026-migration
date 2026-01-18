@@ -1,4 +1,5 @@
 import json
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -65,22 +66,30 @@ st.markdown("""
 # -----------------------------
 # Load Data (PATH FIXED)
 # -----------------------------
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 @st.cache_data
 def load_state_month():
-    df = pd.read_csv("../data/dashboard_state_month.csv")
+    path = os.path.join(BASE_DIR, "..", "data", "dashboard_state_month.csv")
+    df = pd.read_csv(path)
     df["month"] = pd.to_datetime(df["month"], errors="coerce")
     return df
 
 @st.cache_data
 def load_district_month():
-    df = pd.read_csv("../data/dashboard_district_month.csv")
+    path = os.path.join(BASE_DIR, "..", "data", "dashboard_district_month.csv")
+    df = pd.read_csv(path)
     df["month"] = pd.to_datetime(df["month"], errors="coerce")
     return df
 
 @st.cache_data
 def load_geojson():
-    with open("india_states.geojson", "r", encoding="utf-8") as f:
+    path = os.path.join(BASE_DIR, "india_states.geojson")
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 state_df = load_state_month()
 dist_df = load_district_month()
@@ -184,8 +193,77 @@ st.sidebar.metric("Total Activity", f"{state_df_f['activity_total'].sum():,.0f}"
 # -----------------------------
 # Header
 # -----------------------------
-st.title("🛰️ UIDAI Migration & Urbanization Tracker")
-st.caption("Dark + Neon Corporate Dashboard | Migration Proxy + Urbanization Hotspots | UIDAI Hackathon 2026")
+# -----------------------------
+# HEADER (FINAL CLEAN)
+# -----------------------------
+import base64
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def get_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+# ✅ Correct path: assets folder is outside dashboard
+logo_path = os.path.join(BASE_DIR, "..", "assets", "aadhaar_transparent.png")
+logo_base64 = get_base64(logo_path)
+
+st.markdown("""
+<style>
+.header-wrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    padding:10px 0px 6px 0px;
+    margin-bottom:10px;
+}
+
+.header-logo img{
+    height:65px;
+    width:auto;
+    background:transparent !important;
+    border:none !important;
+    outline:none !important;
+    box-shadow:none !important;
+    filter: drop-shadow(0px 0px 10px rgba(0,245,255,0.22));
+}
+
+.header-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+.header-title{
+    font-size:48px;
+    font-weight:900;
+    color:#E6EAF2;
+    line-height:1.05;
+    margin:0;
+}
+
+.header-sub{
+    font-size:14px;
+    color:rgba(230,234,242,0.70);
+    margin-top:4px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+<div class="header-wrap">
+    <div class="header-logo">
+        <img src="data:image/png;base64,{logo_base64}">
+    </div>
+    <div class="header-text">
+        <div class="header-title">UIDAI Migration & Urbanization Tracker</div>
+        <div class="header-sub">Migration Proxy + Urbanization Hotspots | UIDAI Hackathon 2026</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 
 # ============================
 # 🇮🇳 INDIA OVERVIEW PAGE
@@ -231,27 +309,34 @@ if page == "🇮🇳 India Overview":
     rank["state_map"] = rank["state"]
 
     fix_map = {
-        "Andaman and Nicobar Islands": "Andaman and Nicobar",
-        "Dadra and Nagar Haveli and Daman and Diu": "Dadra and Nagar Haveli",
+    # UTs / name variants
+    "Andaman and Nicobar Islands": "Andaman and Nicobar",
+    "Dadra and Nagar Haveli and Daman and Diu": "Dadra and Nagar Haveli",
+    "Puducherry": "Pondicherry",
+    "Pondicherry": "Pondicherry",
 
-        "Delhi": "Delhi",
-        "NCT of Delhi": "Delhi",
+    # Delhi variants
+    "Delhi": "Delhi",
+    "NCT of Delhi": "Delhi",
 
-        "Puducherry": "Pondicherry",
-        "Pondicherry": "Pondicherry",
+    # Older census naming (common in GeoJSON)
+    "Odisha": "Orissa",
+    "Orissa": "Orissa",
 
-        "Odisha": "Orissa",
-        "Telangana": "Andhra Pradesh",
-        "Uttarakhand": "Uttaranchal",
+    "Uttarakhand": "Uttaranchal",
+    "Uttaranchal": "Uttaranchal",
 
-        "Ladakh": "Jammu and Kashmir"
-    }
+    # Some GeoJSONs still have combined/old naming
+    "Jammu & Kashmir": "Jammu and Kashmir",
+    "Jammu and Kashmir": "Jammu and Kashmir",
+    "Ladakh": "Jammu and Kashmir",
+}
+
 
     rank["state_map"] = rank["state_map"].replace(fix_map)
 
     missing = sorted(list(set(rank["state_map"].unique()) - geo_states))
-    if len(missing) > 0:
-        st.warning(f"⚠️ Some states not matching GeoJSON (won't color): {missing}")
+   
 
     # Choropleth Map
     fig_map = px.choropleth(
