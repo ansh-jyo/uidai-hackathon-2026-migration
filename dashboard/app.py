@@ -1,212 +1,129 @@
-import json
-import os
+
 import streamlit as st
 import pandas as pd
 import numpy as np
+import json
+import os
 import plotly.express as px
 import plotly.graph_objects as go
 
-
-def apply_4k_plotly_theme(fig):
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#EAF0FF", size=13),
-        title=dict(font=dict(size=18, color="#FFFFFF")),
-        margin=dict(l=10, r=10, t=60, b=10),
-    )
-
-    fig.update_xaxes(
-        showgrid=False,
-        zeroline=False,
-        showline=False,
-        tickfont=dict(color="rgba(234,240,255,0.75)")
-    )
-
-    fig.update_yaxes(
-        showgrid=True,
-        gridcolor="rgba(255,255,255,0.06)",
-        zeroline=False,
-        tickfont=dict(color="rgba(234,240,255,0.75)")
-    )
-
-    return fig
-
-
-
-# -----------------------------
-# Page Config
-# -----------------------------
+# =============================
+# PAGE CONFIG (DO NOT TOUCH)
+# =============================
 st.set_page_config(
     page_title="UIDAI Migration & Urbanization Tracker",
     page_icon="🛰️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
-#---------------------
-# Custom CSS Theme
-#----------------------------
+
+# =============================
+# STABLE 4K DARK + NEON CSS
+# =============================
 st.markdown("""
 <style>
 
-/* -----------------------------
-   4K DARK + SOFT NEON THEME
------------------------------ */
-
+/* ===== GLOBAL BACKGROUND ===== */
 .stApp{
     background:
-        radial-gradient(circle at 12% 18%, rgba(0,245,255,0.10), transparent 40%),
-        radial-gradient(circle at 88% 82%, rgba(124,255,0,0.08), transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 55%),
-        #060A12;
+        radial-gradient(circle at 15% 20%, rgba(0,245,255,0.08), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(124,255,0,0.06), transparent 45%),
+        #050810;
     color: #EAF0FF;
 }
 
-/* Main container spacing */
+/* ===== MAIN CONTENT ===== */
 .block-container{
     padding-top: 1rem;
     padding-bottom: 2rem;
 }
 
-/* Sidebar */
+
+
+/* ===== SIDEBAR (ALWAYS VISIBLE) ===== */
 section[data-testid="stSidebar"]{
-    background: rgba(10, 14, 26, 0.92);
-    border-right: 1px solid rgba(0,245,255,0.10);
-    box-shadow: 0px 0px 28px rgba(0,0,0,0.65);
+    background: rgba(12,16,28,0.96);
+    border-right: 1px solid rgba(0,245,255,0.15);
+    box-shadow: 6px 0px 28px rgba(0,0,0,0.6);
+    min-width: 320px !important;
+    max-width: 320px !important;
 }
 
-
-/* Sidebar slide-in animation */
-section[data-testid="stSidebar"] {
-    animation: sidebarSlide 0.6s ease-in-out;
-}
-
-@keyframes sidebarSlide {
-    from {
-        transform: translateX(-25px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0px);
-        opacity: 1;
-    }
-}
-
-/* Sidebar button hover animation */
-.stButton > button {
-    transition: all 0.25s ease-in-out !important;
-}
-
-/* Hover glow + lift */
-.stButton > button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 0px 18px rgba(0,245,255,0.18);
-    border: 1px solid rgba(0,245,255,0.35);
-}
-
-/* Click animation */
-.stButton > button:active {
-    transform: scale(0.98);
-    box-shadow: 0px 0px 10px rgba(124,255,0,0.18);
-}
-
-/* Smooth sidebar expanders */
-div[data-testid="stExpander"] {
-    transition: all 0.3s ease-in-out;
-}
-
-
-           
-
-/* Sidebar headings */
+/* ===== SIDEBAR TEXT ===== */
 section[data-testid="stSidebar"] h2{
-    font-size: 18px !important;
-    margin-bottom: 10px !important;
-    color: rgba(234,240,255,0.95) !important;
-    letter-spacing: 0.3px;
+    color: #EAF0FF;
+    font-size: 18px;
 }
-
-/* Sidebar labels */
 section[data-testid="stSidebar"] label{
-    font-size: 13.5px !important;
-    color: rgba(234,240,255,0.78) !important;
+    color: rgba(234,240,255,0.8);
 }
 
-/* Metrics cards (premium glass) */
-div[data-testid="stMetric"] {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
-    padding: 14px 14px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.35);
-}
-div[data-testid="stMetric"] * {
-    color: #EAF0FF !important;
-}
-.glass-card{
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(0,245,255,0.12);
-    border-radius: 22px;
-
-    padding: 18px 18px;   /* ✅ this is the main improvement */
-    margin-top: 14px;
-    margin-bottom: 14px;
-
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-
-    box-shadow: 0px 10px 35px rgba(0,0,0,0.55),
-                0px 0px 18px rgba(0,245,255,0.06);
-}
-
-
-
-/* Button styling (matte + subtle neon glow) */
+/* ===== BUTTONS ===== */
 .stButton > button{
-    background: rgba(255,255,255,0.035);
-    border: 1px solid rgba(0,245,255,0.16);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(0,245,255,0.18);
     border-radius: 14px;
-    color: rgba(234,240,255,0.92);
-    padding: 0.55rem 1rem;
-    transition: 0.2s ease-in-out;
-    box-shadow: 0px 0px 14px rgba(0,245,255,0.05);
+    color: #EAF0FF;
+    padding: 0.6rem 1rem;
+    transition: 0.2s ease;
 }
-
 .stButton > button:hover{
-    border: 1px solid rgba(0,245,255,0.30);
-    box-shadow:
-        0px 0px 20px rgba(0,245,255,0.10),
-        0px 0px 28px rgba(124,255,0,0.06);
+    border-color: rgba(0,245,255,0.35);
+    box-shadow: 0 0 18px rgba(0,245,255,0.15);
     transform: translateY(-1px);
 }
 
-/* Divider line */
-hr{
-    border: none !important;
-    height: 1px !important;
-    background: linear-gradient(
-        90deg,
-        rgba(0,245,255,0.00),
-        rgba(0,245,255,0.20),
-        rgba(124,255,0,0.10),
-        rgba(0,245,255,0.00)
-    ) !important;
-    margin: 18px 0px !important;
+/* ===== METRIC CARDS ===== */
+div[data-testid="stMetric"]{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 14px;
+}
+div[data-testid="stMetric"] *{
+    color: #EAF0FF !important;
 }
 
-/* Remove white background from plotly charts */
-.js-plotly-plot .plotly, .js-plotly-plot .plotly div{
-    background: rgba(0,0,0,0) !important;
+/* ===== PLOTLY FIX ===== */
+.js-plotly-plot .plotly,
+.js-plotly-plot .plotly div{
+    background: transparent !important;
 }
 
-/* Streamlit default header/footer hide (clean look) */
-header{visibility:hidden;}
-footer{visibility:hidden;}
+
+
+
+
+/* -----------------------------
+   FIX: Layout should NOT shift when sidebar collapses
+----------------------------- */
+
+/* Remove the extra blank space that appears when sidebar closes */
+section.main > div {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+/* Force page width to remain stable */
+.block-container {
+    max-width: 1400px !important;
+    margin: auto !important;
+}
+
+/* Fix sidebar collapse pushing content */
+[data-testid="stSidebar"][aria-expanded="false"] ~ div .block-container {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+}
 
 </style>
 """, unsafe_allow_html=True)
+
+
+
+
 
 
 # -----------------------------
@@ -260,6 +177,10 @@ logo_base64 = get_base64(logo_path)
 # -----------------------------
 chosen_state = None
 chosen_district = None
+# =============================
+# SIDEBAR NAVIGATION (ONLY ONE)
+# =============================
+
 
 
 # -----------------------------
@@ -655,7 +576,9 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=50, b=10)
         )
-        fig_in = apply_4k_plotly_theme(fig_in)
+        
+
+
         st.plotly_chart(fig_in, use_container_width=True)
 
     with right:
@@ -674,7 +597,7 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=50, b=10)
         )
-        fig_in = apply_4k_plotly_theme(fig_in)
+        
         st.plotly_chart(fig_out, use_container_width=True)
 
     st.divider()
@@ -771,7 +694,7 @@ if page == "🇮🇳 India Overview":
         height=650,
         margin=dict(l=10, r=10, t=60, b=10),
     )
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
     
     
     st.plotly_chart(fig_sankey, use_container_width=True)
@@ -806,7 +729,7 @@ if page == "🇮🇳 India Overview":
         font=dict(color="#E6EAF2"),
         height=520
     )
-    fig_hot = apply_4k_plotly_theme(fig_hot)
+    
     st.plotly_chart(fig_hot, use_container_width=True)
     
 
@@ -833,7 +756,7 @@ if page == "🇮🇳 India Overview":
         font=dict(color="#E6EAF2"),
         title="India-wide Aadhaar Activity Trend"
     )
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
     st.plotly_chart(fig3, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
     st.divider()
@@ -864,7 +787,7 @@ if page == "🇮🇳 India Overview":
         height=650,
         margin=dict(l=10, r=10, t=60, b=10)
     )
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
 
     st.plotly_chart(fig_heat, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -909,7 +832,7 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=60, b=10)
         )
-        fig_gain = apply_4k_plotly_theme(fig_gain)
+        
         st.plotly_chart(fig_gain, use_container_width=True)
 
     with colB:
@@ -928,7 +851,7 @@ if page == "🇮🇳 India Overview":
             height=420,
             margin=dict(l=10, r=10, t=60, b=10)
         )
-        fig_in = apply_4k_plotly_theme(fig_in)
+        
         st.plotly_chart(fig_lose, use_container_width=True)
        
         st.markdown('</div>', unsafe_allow_html=True)
@@ -987,7 +910,7 @@ elif page == "🏙️ State Deep Dive":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
-    fig_in = apply_4k_plotly_theme(fig)
+    
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### 📍 Top Districts by Activity")
@@ -1012,7 +935,7 @@ elif page == "🏙️ State Deep Dive":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
-    fig2 = apply_4k_plotly_theme(fig2)
+    
     st.plotly_chart(fig2, use_container_width=True)
     
 
@@ -1138,7 +1061,7 @@ elif page == "🏙️ State Deep Dive":
 
 
     
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
     st.plotly_chart(fig_state_flow, use_container_width=True)
 
 
@@ -1182,7 +1105,7 @@ elif page == "📍 District Drilldown":
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#E6EAF2")
     )
-    fig_in = apply_4k_plotly_theme(fig)
+    
     st.plotly_chart(fig, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1232,7 +1155,7 @@ elif page == "👥 Age Migration":
         font=dict(color="#E6EAF2"),
         height=520
     )
-    fig_in = apply_4k_plotly_theme(fig)
+    
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
@@ -1265,7 +1188,7 @@ elif page == "👥 Age Migration":
         yaxis_title="Adult Share (%)",
         margin=dict(l=10, r=10, t=60, b=10)
     )
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
     st.plotly_chart(fig_adult, use_container_width=True)
 
     st.divider()
@@ -1297,7 +1220,7 @@ elif page == "👥 Age Migration":
         font=dict(color="#E6EAF2"),
         height=420
     )
-    fig_in = apply_4k_plotly_theme(fig_in)
+    
     st.plotly_chart(fig_age, use_container_width=True)
     
 
