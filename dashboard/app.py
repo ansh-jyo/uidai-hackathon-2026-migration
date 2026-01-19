@@ -17,6 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
 # =============================
 # STABLE 4K DARK + NEON CSS
 # =============================
@@ -36,6 +37,13 @@ st.markdown("""
 .block-container{
     padding-top: 1rem;
     padding-bottom: 2rem;
+        
+}
+/* Force sidebar always visible on Streamlit Cloud */
+section[data-testid="stSidebar"] {
+    transform: translateX(0px) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 
