@@ -109,17 +109,35 @@ uidai-hackathon-2026-migration/
 
 ##  Dashboard Preview
 
-### India Overview (Map + KPIs)
+### 1) 🗺️ India Overview (Map + KPIs)
 ![India Overview](assets/1-front.png)
 
-### Migration In vs Out
-![Migration In Out](assets/2-migration-in-out.png)
+### 2) 📊 Migration In vs Out (India)
+![Migration In vs Out](assets/2-migration-in-out.png)
 
-### Migration Heatmap
-![Heatmap](assets/3-heatmap.png)
+### 3) 🌡️ Migration Heatmap (State × Month)
+![Migration Heatmap](assets/3-heatmap.png)
 
-### Top Movers (Gainers / Losers)
+### 4) 🚀 Top Movers (Gainers / Losers)
 ![Top Movers](assets/4-gainers.png)
+
+### 5) 📈 State Deep Dive (Trend + KPIs)
+![State Deep Dive](assets/5-state-trend.png)
+
+### 6) 🏙️ District Drilldown (District Trend)
+![District Drilldown](assets/6-district-trend.png)
+
+### 7) 👥 Age Activity Insights (India Age Trend)
+![Age Activity Insights](assets/7-age-migration.png)
+
+### 8) 🧑‍💼 Working-Age Migration Signal (Proxy)
+![Working-Age Migration Signal](assets/8-working-class-migration.png)
+
+### 9) 📍 State Age Migration (Proxy)
+![State Age Migration](assets/9-state-age-mig.png)
+
+### 10) 🍩 Age Contribution Share (Proxy)
+![Age Contribution Share](assets/10-age-contribution.png)
 
 ---
 ## Dashboard Features
