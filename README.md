@@ -113,31 +113,32 @@ uidai-hackathon-2026-migration/
 ![India Overview](assets/1-front.png)
 
 ### 2) 📊 Migration In vs Out (India)
-![Migration In vs Out](assets/2-migration-in-out.png)
+![Migration In vs Out](assets/2-all indi mig-in-out.png)
 
-### 3) 🌡️ Migration Heatmap (State × Month)
-![Migration Heatmap](assets/3-heatmap.png)
+### 3) 🔁 Migration Flow (Proxy) — Source → Destination
+![Migration Flow](assets/3-states in-out flow.png)
 
-### 4) 🚀 Top Movers (Gainers / Losers)
-![Top Movers](assets/4-gainers.png)
+### 4) 🚀 Top Movers (Month-on-Month Change)
+![Top Movers](assets/4-all indi top gain-falling.png)
 
 ### 5) 📈 State Deep Dive (Trend + KPIs)
-![State Deep Dive](assets/5-state-trend.png)
+![State Deep Dive](assets/5-state trend.png)
 
 ### 6) 🏙️ District Drilldown (District Trend)
-![District Drilldown](assets/6-district-trend.png)
+![District Drilldown](assets/6-district trend.png)
 
-### 7) 👥 Age Activity Insights (India Age Trend)
-![Age Activity Insights](assets/7-age-migration.png)
+### 7) 👥 Age Activity Insights (Proxy)
+![Age Activity Insights](assets/7-age migration.png)
 
 ### 8) 🧑‍💼 Working-Age Migration Signal (Proxy)
-![Working-Age Migration Signal](assets/8-working-class-migration.png)
+![Working-Age Migration Signal](assets/8-working classs migration.png)
 
 ### 9) 📍 State Age Migration (Proxy)
-![State Age Migration](assets/9-state-age-mig.png)
+![State Age Migration](assets/9-state age mig.png)
 
 ### 10) 🍩 Age Contribution Share (Proxy)
-![Age Contribution Share](assets/10-age-contribution.png)
+![Age Contribution Share](assets/10-age contribution.png)
+
 
 ---
 ## Dashboard Features
