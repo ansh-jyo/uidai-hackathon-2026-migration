@@ -187,6 +187,9 @@ streamlit run dashboard/app.py
 
 http://localhost:8501
 
+## live demo
+https://uidai-hackathon-2026-migration-guputlnnbpzayyeqmdevxn.streamlit.app/
+
 
 
 
